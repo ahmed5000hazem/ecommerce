@@ -1,0 +1,20 @@
+<div class="container-fluid">
+    <div class="row modal-body-container">
+        <div class="col-lg-3 col-md-4 col-sm-6 modal-body-content mb-4">
+            
+            <div class="card d-none">
+                <img src="" class="card-img-top" alt="">
+                <div class="card-body">
+                    <h5 class="card-title text-info">image name</h5>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="flexCheckDefault" name="images[]" value="" aria-label="...">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            select
+                        </label>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>

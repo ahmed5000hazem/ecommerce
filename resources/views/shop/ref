@@ -1,0 +1,241 @@
+@extends("layouts.app")
+@section("content")
+    @include("includes.shop.header")
+    <!-- ##### Shop Grid Area Start ##### -->
+    <section class="shop_grid_area section-padding-80">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-md-4 col-lg-3">
+                    <div class="shop_sidebar_area border-end">
+                        <!-- ##### Single Widget ##### -->
+                        <div class="widget catagory mb-50 d-none d-md-block">
+                            <!-- Widget Title -->
+                            <h6 class="widget-title mb-30">{{__("app.categories")}}</h6>
+
+                            <!--  Catagories  -->
+                            <div class="catagories-menu">
+                                <ul id="menu-content2" class="menu-content collapse show">
+                                    <!-- Single Item -->
+                                    @foreach ($categories[1] as $mainCategory)
+                                    <li class="sidebar-menu" data-toggle="collapse" data-target="#category{{$mainCategory->id}}">
+                                        <a class="fs-6 fw-bold" href="#">{{$mainCategory->name}}</a>
+                                        <ul class="sub-menu collapse @if($loop->first)show @endif" id="category{{$mainCategory->id}}">
+                                            @foreach ($categories[0] as $category)
+                                                @if ($category->parent_id === $mainCategory->id)
+                                                    <li><a class="fs-6" href="/category/{{$category->id}}">{{$category->name}}</a></li>
+                                                @endif
+                                            @endforeach
+                                        </ul>
+                                    </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="widget d-block d-sm-none mb-3">
+
+                            <div class="accordion accordion-flush" id="accordionFlushExample">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="flush-headingOne">
+                                        <button class="btn collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-filter-right" viewBox="0 0 16 16">
+                                                <path d="M14 10.5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0 0 1h3a.5.5 0 0 0 .5-.5zm0-3a.5.5 0 0 0-.5-.5h-7a.5.5 0 0 0 0 1h7a.5.5 0 0 0 .5-.5zm0-3a.5.5 0 0 0-.5-.5h-11a.5.5 0 0 0 0 1h11a.5.5 0 0 0 .5-.5z"/>
+                                            </svg>
+                                        </button>
+                                    </h2>
+                                    <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                                        <div class="accordion-body">
+                                            <button class="btn " type="button" data-bs-toggle="collapse" data-bs-target="#sizefilter" aria-expanded="false" aria-controls="collapseExample">
+                                                {{__("app.size")}}
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+                                                    <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                                                </svg>
+                                            </button>
+                                            <button class="btn " type="button" data-bs-toggle="collapse" data-bs-target="#pricefilter" aria-expanded="false" aria-controls="collapseExample">
+                                                {{__("app.prod-price")}}
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+                                                    <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                                                </svg>
+                                            </button>
+                                            
+                                            <div class="mt-2">
+                                                <div class="collapse" id="sizefilter">
+                                                    <div class="card card-body">
+                                                        <div class="row row-cols-5">
+                                                            @foreach ($sizes as $size)
+                                                                <div class="col border px-1 py-1 my-1 mx-1"> <a href="{{url()->current()}}?size={{$size->id}}" class="d-block text-center lh-base">{{$size->size}}</a> </div>
+                                                            @endforeach
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="collapse" id="pricefilter">
+                                                    <div class="card card-body">
+                                                        <div class="row">
+                                                            <form action="" method="get">
+                                                                <div class="form-control border-0">
+                                                                    <label for="minPriceRangeSM" id="minPriceLableSM" class="form-label"> {{__("app.min-price")}} <small class="ms-1 min-price-lable"> {{$products->min("price")}} </small> </label>
+                                                                    <input type="range" name="min_price" step="5" class="form-range" min="0" value="{{$products->min("price")}}" max="1000" id="minPriceRangeSM">
+                                                                </div>
+                                                                <div class="form-control border-0">
+                                                                    <label for="maxPriceRangeSM" id="maxPriceLableMS" class="form-label"> {{__("app.max-price")}} <small class="ms-1 min-price-lable"> {{$products->max("price")}} </small> </label>
+                                                                    <input type="range" name="max_price" min="0" step="5" value="{{$products->max("price")}}" max="1000" class="form-range" id="maxPriceRangeSM">
+                                                                </div>
+                                                                <div class="form-control border-0 d-flex justify-content-start">
+                                                                    <input type="submit" class="btn fw-bold text-primary" name="price_filter" value="{{__("app.save")}}"> 
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="widget d-none d-md-block">
+                            <form action="" method="get" class="ps-2">
+                                <div class="form-control border-0">
+                                    <label for="minPriceRange" id="minPriceLable" class="form-label"> {{__("app.min-price")}} <small class="ms-1 min-price-lable"> {{$products->min("price")}} </small> </label>
+                                    <input type="range" name="min_price" step="5" class="form-range" min="0" value="{{$products->min("price")}}" max="1000" id="minPriceRange">
+                                </div>
+                                <div class="form-control border-0">
+                                    <label for="maxPriceRange" id="maxPriceLable" class="form-label "> {{__("app.max-price")}} <small class="ms-1 min-price-lable"> {{$products->max("price")}} </small> </label>
+                                    <input type="range" name="max_price" min="0" step="5" value="{{$products->max("price")}}" max="1000" class="form-range" id="maxPriceRange">
+                                </div>
+                                <div class="form-control border-0 d-flex justify-content-start">
+                                    <input type="submit" class="btn fw-bold text-primary" name="price_filter" value="{{__("app.save")}}"> 
+                                </div>
+                            </form>
+                        </div>
+                        <!-- ##### Single Widget ##### -->
+                        <div class="widget color mt-lg-5 mb-2 mb-md-5 d-none d-md-block">
+                            <!-- Widget Title 2 -->
+                            {{-- <p class="widget-title2 mb-30"></p> --}}
+                            <div class="dropdown">
+                                <button class="btn dropdown-toggle" type="button" id="dropdownMenuClickableInside" data-bs-toggle="dropdown" aria-expanded="false">
+                                    {{__("app.size")}}
+                                </button>
+                                <ul class="dropdown-menu overflow-auto" style="height: 200px;" aria-labelledby="dropdownMenuClickableInside">
+                                    @if(count($sizes))
+                                        @foreach ($sizes as $size)
+                                            <li><a href="{{url()->current()}}?size={{$size->id}}" class="dropdown-item text-center lh-base">{{$size->size}}</a></li>
+                                            @if (!$loop->last)
+                                                <li><hr class="dropdown-divider"></li>
+                                            @endif
+                                        @endforeach
+                                    @else
+                                        <li class="fw-bold text-center lh-base"> {{__("app.no-sizes-avilable")}} </li>
+                                    @endif
+                                </ul>
+                            </div>
+                            <div class="widget-desc">   
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-8 col-lg-9">
+                    <div class="shop_grid_product_area">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="product-topbar d-flex align-items-center justify-content-between">
+                                    <!-- Total Products -->
+                                    <div class="total-products">
+                                        <p class="fs-lg-6"> {{__("app.products-found")}}
+                                            @if ($products->total() > 2)
+                                                <span>
+                                                    {{$products->total()}}
+                                                </span>
+                                                {{__("app.totalProducts")}}
+                                            @elseif($products->total() === 2)
+                                                {{__("app.tow-products")}}
+                                            @else
+                                                <span>
+                                                    {{$products->total()}}
+                                                </span>
+                                                {{__("app.product")}}    
+                                            @endif
+                                        </p>
+                                    </div>
+                                    <!-- Sorting -->
+                                    <div class="product-sorting d-flex">
+                                        
+                                        <!-- Example single danger button -->
+                                        <div class="btn-group">
+                                            <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                                {{__("app.sort-by")}}:
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li><a class="dropdown-item" href="<?php  if ( request()->query("size") ) {echo "?size=" . request()->query("size") . "&" ;} else {echo "?";} ?>sort_by=created_at&sort_key=DESC">{{__("app.newest")}}</a></li>
+                                                <li><a class="dropdown-item" href="<?php  if ( request()->query("size") ) {echo "?size=" . request()->query("size") . "&" ;} else {echo "?";} ?>sort_by=created_at&sort_key=ASC">{{__("app.oldest")}}</a></li>
+                                                <li><a class="dropdown-item" href="<?php  if ( request()->query("size") ) {echo "?size=" . request()->query("size") . "&" ;} else {echo "?";} ?>sort_by=price&sort_key=DESC">{{__("app.higher-price")}}</a></li>
+                                                <li><a class="dropdown-item" href="<?php  if ( request()->query("size") ) {echo "?size=" . request()->query("size") . "&" ;} else {echo "?";} ?>sort_by=price&sort_key=ASC">{{__("app.lower-price")}}</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            @foreach ($products as $product)
+                                    <!-- Single Product -->
+                                <div class="col-12 col-sm-6 col-lg-4">
+                                    <div class="single-product-wrapper">
+                                        <!-- Product Image -->
+                                        <div class="product-img">
+                                            @if ($product->item_value_discount || $product->items_value_discount || $product->items_items_discount)
+                                                <div class="product-badge offer-badge">
+                                                    <span>
+                                                        {{__("app.sale")}}
+                                                    </span>
+                                                </div>
+                                            @endif
+
+                                            @foreach ($product->images()->get() as $image)
+                                                @if ($loop->index === 0)
+                                                    <img src="/images/products/sellers/{{$image->path}}" alt="">
+                                                    
+                                                @elseif($loop->index === 1)
+                                                    <img class="hover-img" src="/images/products/sellers/{{$image->path}}" alt="">
+                                                    @break
+                                                @endif
+                                            @endforeach
+                                            <!-- Hover Thumb -->
+
+                                        </div>
+                                        <!-- Product Description -->
+                                        <div class="product-description">
+                                            <a href="/product/{{$product->id}}/show">
+                                                <h6>{{$product->name}}</h6>
+                                            </a>
+                                            <p class="product-price">{{$product->price}} {{__("app.EGP")}}</p>
+
+                                            <!-- Hover Content -->
+                                            <div class="hover-content">
+                                                <!-- Add to Cart -->
+                                                <div class="add-to-cart-btn">
+                                                    <a href="#" class="btn essence-btn">{{__('app.add-to-cart')}}</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                    <!-- Pagination -->
+                    <nav aria-label="navigation">
+                        {{ $products->links() }}
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ##### Shop Grid Area End ##### -->
+
+    @include("includes.shop.footer")
+@endsection

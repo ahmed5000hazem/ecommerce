@@ -1,0 +1,117 @@
+public function category($id, Request $request)
+    {
+        // return $request->query();
+
+        if ($request->query()) {
+            $validator = Validator::make($request->query(),[
+                'min_price_lg' => ["numeric", "nullable"],
+                'max_price_lg' => ["numeric", "nullable"],
+                'size' => ["numeric", "nullable"],
+                'sort_by' => [
+                    "nullable",
+                    function ($attribute, $value, $fail) use ($request) {
+                        $sort_keys = ["ASC", "DESC", "asc", "desc"];
+                        $sort_cols = ["created_at", "price"];
+                        $exploded = explode("-", $request->query("sort_by"));
+                        if (count($exploded) != 2) {
+                            $fail($attribute.' is invalid.');
+                        } else {
+                            if (!in_array($exploded[0], $sort_cols)) {
+                                $fail($attribute.' is invalid.');
+                            }
+                            if (!in_array($exploded[1], $sort_keys)) {
+                                $fail($attribute.' is invalid.');
+                            }
+                        }
+                    }
+                ],
+                // "min_price" => ["numeric", Rule::requiredIf(null !== $request->query("price_filter"))],
+                // "max_price" => ["numeric", Rule::requiredIf(null !== $request->query("price_filter"))],
+            ]);
+
+            if ($validator->fails()){
+                return redirect()->back();
+            }
+        }
+
+        $category = Category::findOrFail($id);
+
+        $products = Product::where("category_id", $id)
+        ->where("active", 1)
+        ->where("is_avilable", 1);
+
+        if ($request->query("min_price")) {
+            $products->where("price", ">=", $request->query("min_price"));
+        }
+
+        // return $products->get();
+        if ($request->query("max_price")) {
+            $products->where("price", "<=", $request->query("max_price"));
+        }
+        if ($request->query("size") && $request->query("size") !== 0){
+            $products->whereRaw("EXISTS(
+                SELECT
+                    id
+                FROM
+                    size_product
+                WHERE
+                    size_product.product_id = products.id
+                AND
+                    size_id = ?
+            )", [
+                "size_id" => $request->query("size")
+            ]);
+        }
+
+        if ($request->query("sort_by")) {
+            $exploded = explode("-", $request->query("sort_by"));
+            $products->orderBy($exploded[0], $exploded[1]);
+        }
+
+        $products = $products->paginate(30);
+
+        // return $products;
+        
+        // if (!$request->query("size") || !$request->query("sort_by") || !$request->query("price_filter")){
+            
+        //     $products = Product::where([
+        //         ["category_id", $id],
+        //         ["active", 1],
+        //     ])->paginate(10);
+
+        // }
+
+        // if ($request->query("sort_by") && !$request->query("size")) {
+        //     $products = Product::where([
+        //         ["category_id", $id],
+        //         ["active", 1],
+        //     ])->orderBy($request->query("sort_by"), $request->query("sort_key"))->paginate(10);
+        // }
+
+        // if ($request->query("size")) {
+        //     if ($request->query("sort_by")) {
+        //         $size = Size::findOrFail($request->query("size"));
+        //         $products = $size->products()->where("category_id", $id)->orderBy($request->query("sort_by"), $request->query("sort_key"))->paginate(10);
+        //     } else {
+        //         $size = Size::findOrFail($request->query("size"));
+        //         $products = $size->products()->where("category_id", $id)->paginate(10);
+        //     }
+        // }
+
+        // if ($request->query("min_price") || $request->query("max_price")) {
+        //     $products = Product::where([
+        //         ["category_id", $id],
+        //         ["active", 1],
+        //         ["price", ">=", $request->query("min_price")],
+        //         ["price", "<=", $request->query("max_price")],
+        //     ])->paginate(10);
+        // }
+
+        return view("shop.category", [
+            "products" => $products,
+            "category" => $category,
+            "categories" => self::$groupedCategories,
+            "sizes" => self::$sizes,
+        ]);
+
+    }

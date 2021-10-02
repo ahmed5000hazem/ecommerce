@@ -1,0 +1,126 @@
+.classynav .menu-navigator .shop-link{
+    color: #000;
+}
+.border-end{
+    border-right: none!important;
+}
+#productDetailsShow{
+    height: 83vh;
+}
+#productDetailsShow .carousel-inner{
+    height: 100%;
+}
+#productDetailsShow img{
+    width: 100%!important;
+    height: auto!important;
+}
+#productDetailsShow .carousel-control-next {
+    right: unset!important;
+}
+.site-section{
+    margin-top: 10rem!important;
+}
+
+#presents_modal .card .form-select{
+    display: block!important;
+}
+
+#presents_modal .card .nice-select.form-select{
+    display: none!important;
+}
+
+.nice-select.form-select{
+    width: 100%;
+    line-height: unset;
+    text-align: right!important;
+    padding-right: 1.5em;
+}
+.nice-select.form-select::after{
+    content:'';
+    border: 0;
+}
+.user-login-info .dropdown{
+    height: 100%;
+    width: 85px;
+}
+.user-login-info .dropdown-toggle::after{
+    border: 0;
+}
+.user-login-info .dropdown-menu{
+    max-height: 160px;
+}
+.user-login-info .dropdown-menu a{
+    width: 100%;
+    border-left: 0;
+    line-height: 30px;
+    height: 40px;
+    border-bottom: 1px solid #ddd;
+}
+div.select-size-filter{
+    display: none!important;
+}
+/* fix responsive issues */
+@media only screen and (max-width: 768px) {
+    .classynav .dd-arrow{
+        right: unset!important;
+        left: 20px!important;
+    }
+    .section-padding-80{
+        padding-top: 30px!important;
+    }
+    #productDetailsShow{
+        height: 85vh;
+    }
+    .cart-table{
+        width: 1000px;
+    }
+    .user-login-info .dropdown{
+        width: fit-content!important;
+    }
+}
+@media only screen and (max-width: 576px) {
+    #productDetailsShow{
+        height: 70vh;
+    }
+    
+}
+@media only screen and (min-width: 769px) {
+    .classynav .menu-navigator a{
+        position: relative!important;
+    }
+    .classynav .menu-navigator a::after{
+        content: ''!important;
+        
+    }
+    .single_product_desc{
+        padding-top: 0;
+    }
+    .classynav .menu-navigator .shop-link{
+        margin-left: 10px;
+    }
+    .classynav .menu-navigator .shop-link::before{
+        content: '\e900';
+        font-family: icomoon!important;
+        color: #000!important;
+        font-size: 13px;
+        position: absolute!important;
+        left: -5px;
+    }
+    .classynav .menu-navigator .title a{
+        padding: 0!important;
+    }
+    .classynav .menu-navigator .nav-link::before{
+        content: '';
+    }
+    .classynav .dd-arrow{
+        right: unset!important;
+        left: -20px!important;
+    }
+    .single_product_thumb{
+        max-height: 50vh;
+    }
+    .single_product_thumb img{
+        max-height: 100%!important;
+    }
+    
+}
